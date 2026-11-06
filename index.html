@@ -1594,23 +1594,36 @@ html.dark[data-design="wood"] .dock-add { background: linear-gradient(180deg, #C
 #ipoHead.w-md .ipo-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #ipoHead.w-xs .ipo-st b { font-size: 20px; }
 
-/* 입력 폼 */
-.ipo-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-areas: "name name sd" "sa xd xa" "memo memo memo" "ref ref submit"; gap: 12px 14px; align-items: end; }
+/* 입력 폼: 종목명·메모 → ① 청약 ② 환불 ③ 매도 → 수수료 · 계산식 → 기록하기 */
+.ipo-form { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-areas: "name name memo memo" "steps steps steps steps" "fs ft prev prev" "submit submit submit submit"; gap: 12px 14px; align-items: end; }
 .ipo-form .lbl { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 6px 6px; }
 .ipo-form .lbl > .input, .ipo-form .lbl > .ipo-amt { grid-column: 1 / -1; }
 .lbl-sub { font-size: 12px; font-weight: 700; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ip-name { grid-area: name; } .ip-sd { grid-area: sd; } .ip-sa { grid-area: sa; } .ip-xd { grid-area: xd; } .ip-xa { grid-area: xa; } .ip-memo { grid-area: memo; } .ip-ref { grid-area: ref; } .ip-submit { grid-area: submit; }
+.ip-name { grid-area: name; } .ip-memo { grid-area: memo; } .ip-steps { grid-area: steps; } .ip-fs { grid-area: fs; } .ip-ft { grid-area: ft; } .ip-prev { grid-area: prev; } .ip-submit { grid-area: submit; }
 .ipo-amt { position: relative; display: block; }
 .ipo-amt .input { padding-right: 34px; text-align: right; font-weight: 800; font-family: var(--font-num); }
 .ipo-amt > span { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 800; color: var(--ink-3); pointer-events: none; }
 .ip-submit { height: 44px; }
-.ipo-reflect { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
-.ipo-ref-l { font-size: 13px; font-weight: 800; color: var(--ink-2); margin-right: 2px; }
-.ipo-preview { display: inline-flex; flex-wrap: wrap; gap: 4px 12px; margin-left: auto; font-size: 13.5px; font-weight: 800; color: var(--ink-2); }
-.ipo-preview b { font-family: var(--font-num); }
-#ipoFormCard.w-md .ipo-form { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "name name" "sd sa" "xd xa" "memo memo" "ref ref" "submit submit"; }
-#ipoFormCard.w-xs .ipo-form { grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "sd" "sa" "xd" "xa" "memo" "ref" "submit"; }
-#ipoFormCard.w-xs .ipo-preview { margin-left: 0; flex-basis: 100%; }
+.ipo-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ipo-step { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 12px 13px 13px; border-radius: var(--r-md); background: var(--tint); }
+.ipo-step-h { display: flex; align-items: center; gap: 7px; min-width: 0; font-size: 14.5px; font-weight: 800; color: var(--ink); }
+.ipo-step-h i { display: inline-grid; place-items: center; width: 21px; height: 21px; flex-shrink: 0; border-radius: 50%; background: var(--ink); color: var(--bg-page); font-style: normal; font-size: 12px; font-weight: 800; font-family: var(--font-num); }
+.ipo-step-h span { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--ink-3); white-space: nowrap; }
+.ipo-step .ref-chip { align-self: flex-start; }
+.ipo-calc { align-self: center; display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 13px; font-weight: 700; line-height: 1.55; color: var(--ink-2); }
+.ipo-calc b { font-family: var(--font-num); font-weight: 800; color: var(--ink); }
+.ipo-calc b.pl-up { color: var(--up); } .ipo-calc b.pl-down { color: var(--down); }
+.ipo-calc small { font-size: 12px; font-weight: 700; color: var(--ink-3); }
+/* 760px 아래: 종목명·메모, 수수료 두 칸씩 · 세 단계는 그대로 나란히 */
+#ipoFormCard.w-md .ipo-form { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "name memo" "steps steps" "fs ft" "prev prev" "submit submit"; }
+/* 640px 아래: 세 단계를 위아래로 (단계 안은 날짜 | 금액) */
+#ipoFormCard.w-sm .ipo-steps { grid-template-columns: minmax(0, 1fr); }
+#ipoFormCard.w-sm .ipo-step { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
+#ipoFormCard.w-sm .ipo-step-h, #ipoFormCard.w-sm .ipo-step .ref-chip { grid-column: 1 / -1; justify-self: start; }
+#ipoFormCard.w-xs .ipo-form { grid-template-columns: minmax(0, 1fr); grid-template-areas: "name" "memo" "steps" "fs" "ft" "prev" "submit"; }
+/* 단계 칸이 좁을 때 보조 설명은 줄여요 */
+.ipo-step .lbl-sub { font-size: 11.5px; }
+#ipoFormCard.w-xs .ipo-step { grid-template-columns: minmax(0, 1fr); }
 
 /* 반영 칩 (폼의 체크박스 · 목록의 버튼 같은 모양) */
 .ref-chip { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 13px 0 10px; border-radius: 999px; font-size: 13.5px; font-weight: 800; color: var(--ink-2); background: var(--solid); box-shadow: inset 0 0 0 1.5px var(--line); cursor: pointer; white-space: nowrap; user-select: none; font-family: var(--font); transition: background .15s, box-shadow .15s, color .15s; }
@@ -1641,6 +1654,7 @@ html.dark[data-design="wood"] .dock-add { background: linear-gradient(180deg, #C
 .ipo-net b { font-size: 14px; color: var(--ink); font-family: var(--font-num); }
 .ipo-net b.pl-up { color: var(--up); } .ipo-net b.pl-down { color: var(--down); }
 .ipo-net small { font-size: 11.5px; font-weight: 700; color: var(--warn); }
+.ipo-net small.fut { color: var(--ink-3); }
 .ipo-acts { display: flex; gap: 2px; }
 @media (max-width: 640px) {
   .ipo-net { margin-left: 0; text-align: left; flex: 1 1 auto; }
@@ -1727,26 +1741,39 @@ html.dark[data-design="wood"] .dock-add { background: linear-gradient(180deg, #C
     <section class="view" id="viewIpo" aria-label="공모주 손익" hidden>
       <section class="card ipo-head" id="ipoHead">
         <div class="card-head"><div><h2 class="card-title"><span data-icon="coins"></span>공모주 손익</h2>
-          <p class="card-sub">종목별로 청약금액과 매도금액을 적으면 손익을 계산해요. <b>출금 · 입금</b>을 고른 것만 내 자산에 반영되고, 같은 종목은 차이만큼 한 번만 반영돼요.</p></div></div>
+          <p class="card-sub">종목마다 청약 입금액 · 환불 금액 · 매도 금액 · 수수료를 적으면 손익을 계산해요. <b>출금 · 환불 입금 · 매도 입금</b> 중 고른 것만 각자의 날짜에 내 자산에 반영되고, 종목마다 합계 한 줄로 보여요.</p></div></div>
         <div class="ipo-stats" id="ipoStats"></div>
       </section>
 
       <section class="card ipo-form-card" id="ipoFormCard" aria-labelledby="ipFormTitle">
-        <div class="card-head"><div><h3 class="card-title" id="ipFormTitle">새 공모주 기록</h3><p class="card-sub">청약만 했으면 매도금액은 비워 두고, 판 다음에 수정해서 채워요</p></div>
+        <div class="card-head"><div><h3 class="card-title" id="ipFormTitle">새 공모주 기록</h3><p class="card-sub">청약만 했으면 ①만 적고, 환불 · 매도가 끝날 때마다 수정해서 채워요</p></div>
           <div class="card-tools"><button type="button" class="btn btn-sm btn-ghost" id="ipCancel" hidden>수정 취소</button></div></div>
         <form id="ipoForm" class="ipo-form" autocomplete="off" novalidate>
           <label class="lbl ip-name">종목명<input id="ipName" class="input" placeholder="예: 가나다전자" maxlength="40" /></label>
-          <label class="lbl ip-sd">청약일<input type="date" id="ipSd" class="input" /></label>
-          <label class="lbl ip-sa">청약금액 <span class="lbl-sub">계좌에서 나간 돈</span><span class="ipo-amt"><input id="ipSa" class="input" inputmode="numeric" placeholder="0" /><span>원</span></span></label>
-          <label class="lbl ip-xd">매도일<input type="date" id="ipXd" class="input" /></label>
-          <label class="lbl ip-xa">매도금액 <span class="lbl-sub">판 뒤 들어온 돈</span><span class="ipo-amt"><input id="ipXa" class="input" inputmode="numeric" placeholder="아직이면 비워 두기" /><span>원</span></span></label>
           <label class="lbl ip-memo">메모 <span class="lbl-sub">선택</span><input id="ipMemo" class="input" placeholder="증권사, 배정 수량 등" maxlength="60" /></label>
-          <div class="ipo-reflect ip-ref">
-            <span class="ipo-ref-l">내 자산에 반영</span>
-            <label class="ref-chip"><input type="checkbox" id="ipRo" /><i class="ck" aria-hidden="true"></i>출금 (청약금)</label>
-            <label class="ref-chip"><input type="checkbox" id="ipRi" /><i class="ck" aria-hidden="true"></i>입금 (매도금)</label>
-            <span class="ipo-preview" id="ipPreview" aria-live="polite"></span>
+          <div class="ipo-steps ip-steps">
+            <div class="ipo-step" role="group" aria-labelledby="ipS1">
+              <div class="ipo-step-h" id="ipS1"><i aria-hidden="true">1</i>청약<span>계좌에서 나간 돈</span></div>
+              <label class="lbl">청약일<input type="date" id="ipSd" class="input" /></label>
+              <label class="lbl">청약 입금액 <span class="lbl-sub">청약하려고 넣은 돈</span><span class="ipo-amt"><input id="ipSa" class="input" inputmode="numeric" placeholder="0" /><span>원</span></span></label>
+              <label class="ref-chip"><input type="checkbox" id="ipRo" /><i class="ck" aria-hidden="true"></i>출금 반영</label>
+            </div>
+            <div class="ipo-step" role="group" aria-labelledby="ipS2">
+              <div class="ipo-step-h" id="ipS2"><i aria-hidden="true">2</i>환불<span>1차 입금</span></div>
+              <label class="lbl">환불일<input type="date" id="ipRd" class="input" /></label>
+              <label class="lbl">환불 금액 <span class="lbl-sub">배정 후 돌려받은 돈</span><span class="ipo-amt"><input id="ipRa" class="input" inputmode="numeric" placeholder="아직이면 비워 두기" /><span>원</span></span></label>
+              <label class="ref-chip"><input type="checkbox" id="ipRr" /><i class="ck" aria-hidden="true"></i>입금 반영</label>
+            </div>
+            <div class="ipo-step" role="group" aria-labelledby="ipS3">
+              <div class="ipo-step-h" id="ipS3"><i aria-hidden="true">3</i>매도<span>2차 입금</span></div>
+              <label class="lbl">매도일<input type="date" id="ipXd" class="input" /></label>
+              <label class="lbl">매도 금액 <span class="lbl-sub">팔고 들어온 돈</span><span class="ipo-amt"><input id="ipXa" class="input" inputmode="numeric" placeholder="아직이면 비워 두기" /><span>원</span></span></label>
+              <label class="ref-chip"><input type="checkbox" id="ipRi" /><i class="ck" aria-hidden="true"></i>입금 반영</label>
+            </div>
           </div>
+          <label class="lbl ip-fs">청약 수수료<span class="ipo-amt"><input id="ipFs" class="input" inputmode="numeric" placeholder="0" /><span>원</span></span></label>
+          <label class="lbl ip-ft">이체 수수료 <span class="lbl-sub">계좌 간 이체</span><span class="ipo-amt"><input id="ipFt" class="input" inputmode="numeric" placeholder="0" /><span>원</span></span></label>
+          <div class="ipo-calc ip-prev" id="ipPreview" aria-live="polite"></div>
           <button class="btn btn-primary ip-submit" type="submit" id="ipSubmit">기록하기</button>
         </form>
       </section>
@@ -1754,7 +1781,7 @@ html.dark[data-design="wood"] .dock-add { background: linear-gradient(180deg, #C
       <section class="card" id="ipoListCard">
         <div class="card-head"><div><h3 class="card-title"><span data-icon="list"></span>공모주 기록</h3><p class="card-sub" id="ipoListSub"></p></div>
           <div class="card-tools"><div class="seg sm" id="ipoFilterSeg" role="group" aria-label="공모주 거르기">
-            <button type="button" data-act="ipoFilter" data-v="all">전체</button><button type="button" data-act="ipoFilter" data-v="pend">청약 중</button><button type="button" data-act="ipoFilter" data-v="sold">매도 완료</button>
+            <button type="button" data-act="ipoFilter" data-v="all">전체</button><button type="button" data-act="ipoFilter" data-v="pend">진행 중</button><button type="button" data-act="ipoFilter" data-v="sold">매도 완료</button>
           </div></div></div>
         <div class="ipo-list" id="ipoList"></div>
       </section>
@@ -1987,13 +2014,14 @@ function normalizeDB() {
   for (const e of DB.entries) { if (!e.o) e.o = o++; if (!e.t) e.t = 1; e.a = Math.round(Number(e.a) || 0); e.c = Number(e.c) || 11; }
   if (!Array.isArray(DB.ipos)) DB.ipos = [];
   const isD = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s || "");
+  const amt = (v) => Math.max(0, Math.round(Number(v) || 0)), opt = (v) => (v == null || v === "" ? null : amt(v));
   for (const p of DB.ipos) {
     p.n = String(p.n || "").trim() || "이름 없는 공모주";
-    p.sa = Math.max(0, Math.round(Number(p.sa) || 0));
-    p.xa = p.xa == null || p.xa === "" ? null : Math.max(0, Math.round(Number(p.xa) || 0));
+    p.sa = amt(p.sa); p.ra = opt(p.ra); p.xa = opt(p.xa); p.fs = amt(p.fs); p.ft = amt(p.ft);
     if (!isD(p.sd)) p.sd = todayStr();
+    if (!isD(p.rd)) p.rd = "";
     if (!isD(p.xd)) p.xd = "";
-    p.ro = p.ro ? 1 : 0; p.ri = p.ri ? 1 : 0; if (!p.t) p.t = 1;
+    p.ro = p.ro ? 1 : 0; p.rr = p.rr ? 1 : 0; p.ri = p.ri ? 1 : 0; if (!p.t) p.t = 1;
   }
 }
 function loadDB() {
@@ -2032,8 +2060,8 @@ function idx() {
   const catMap = new Map(DB.cats.map((c) => [c.id, c]));
   const byDate = new Map();
   for (const e of live) { let g = byDate.get(e.d); if (!g) byDate.set(e.d, (g = [])); g.push(e); }
-  const ipoFlows = ipoLive().map(ipoFlow).filter(Boolean).sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
-  IDX = { live, catMap, byDate, ipoFlows };
+  const flows = ipoLive().flatMap(ipoFlows).sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
+  IDX = { live, catMap, byDate, ipoFlows: flows };
   return IDX;
 }
 const cat = (id) => idx().catMap.get(id) || { id, name: "미분류", emoji: "🏷️", type: "exp" };
@@ -2098,21 +2126,40 @@ function assetSeries(year) {
 }
 
 /* ---------- 공모주 ---------- */
-/* p = { id, n 종목명, sd 청약일, sa 청약금액, xd 매도일, xa 매도금액(null = 아직), ro 출금 반영, ri 입금 반영, m 메모, t, del } */
+/* p = { id, n 종목명,
+         sd 청약일 · sa 청약 입금액(청약하려고 넣은 돈) · ro 출금 반영,
+         rd 환불일 · ra 환불 금액(null = 아직) · rr 1차 입금(환불) 반영,
+         xd 매도일 · xa 매도 금액(null = 아직) · ri 2차 입금(매도) 반영,
+         fs 청약 수수료 · ft 계좌 간 이체 수수료 · m 메모, t, del } */
 const ipoLive = () => DB.ipos.filter((p) => !p.del);
 const ipoSold = (p) => p.xa != null;
-const ipoProfit = (p) => (ipoSold(p) ? p.xa - p.sa : null);
-/** 현재 자산 반영: 같은 종목은 (입금 − 출금) 차이를 한 줄로. 날짜는 입금을 골랐으면 매도일, 아니면 청약일 */
-function ipoFlow(p) {
-  const inOn = p.ri && ipoSold(p), outOn = !!p.ro;
-  if (!inOn && !outOn) return null;
-  return { id: p.id, n: p.n, d: inOn ? (p.xd || p.sd) : p.sd, a: (inOn ? p.xa : 0) - (outOn ? p.sa : 0) };
+const ipoRefunded = (p) => p.ra != null;
+const ipoFees = (p) => (p.fs || 0) + (p.ft || 0);
+/** 배정 금액(주식에 들어간 돈) = 청약 입금액 − 환불 금액 */
+const ipoCost = (p) => Math.max(0, p.sa - (p.ra || 0));
+/** 손익 = 환불 금액 + 매도 금액 − 청약 입금액 − 청약 수수료 − 이체 수수료 (매도 전이면 null) */
+const ipoProfit = (p) => (ipoSold(p) ? (p.ra || 0) + p.xa - p.sa - ipoFees(p) : null);
+/** 수익률 = 손익 ÷ 배정 금액 */
+const ipoRate = (p) => { const v = ipoProfit(p), b = ipoCost(p) || p.sa; return v == null || !b ? null : v / b; };
+/** 자산에 반영할 돈의 흐름 — 고른 것만, 각자의 날짜에: 출금(청약 입금 + 수수료) → 1차 입금(환불) → 2차 입금(매도) */
+function ipoFlows(p) {
+  const out = [];
+  if (p.ro) out.push({ id: p.id, k: "ro", d: p.sd, a: -(p.sa + ipoFees(p)) });
+  if (p.rr && ipoRefunded(p)) out.push({ id: p.id, k: "rr", d: p.rd || p.sd, a: p.ra });
+  if (p.ri && ipoSold(p)) out.push({ id: p.id, k: "ri", d: p.xd || p.rd || p.sd, a: p.xa });
+  return out;
 }
-/** 오늘 자산에 들어가 있는 공모주 반영 합계 (기초자산 기준일 이후) */
+/** 종목 하나: 오늘 내 자산에 반영된 합계(v) · 날짜가 아직 안 온 흐름(fut) · 기초자산 기준일 이전이라 빠진 흐름(early) */
+function ipoNet(p, t = todayStr()) {
+  const base = DB.settings.baseDate, fl = ipoFlows(p); let v = 0, fut = 0, early = 0, futD = "";
+  for (const f of fl) { if (f.d > t) { fut += f.a; futD = futD && futD < f.d ? futD : f.d; } else if (f.d < base) early += f.a; else v += f.a; }
+  return { v, fut, futD, early, any: fl.length > 0, flows: fl };
+}
+/** 오늘 자산에 들어가 있는 공모주 반영 합계 (기초자산 기준일 이후) · 종목 수 */
 function ipoAssetNow() {
-  const s = DB.settings, t = todayStr(); let v = 0, n = 0;
-  for (const f of idx().ipoFlows) if (f.d <= t && f.d >= s.baseDate) { v += f.a; n++; }
-  return { v, n };
+  const s = DB.settings, t = todayStr(); let v = 0; const ids = new Set();
+  for (const f of idx().ipoFlows) if (f.d <= t && f.d >= s.baseDate) { v += f.a; ids.add(f.id); }
+  return { v, n: ids.size };
 }
 
 /* ---------- 기간 ---------- */
@@ -2687,7 +2734,7 @@ function renderKPIs() {
       <div class="kpi-line"><span>기초자산 <span class="muted">(${esc(DB.settings.baseDate.replaceAll("-", "."))}부터)</span></span><b>${won(DB.settings.base)}</b></div>
       <div class="kpi-line"><span>${ay}년 수입 − 지출</span><b>${sgnWon(ytd.net)}</b></div>
       <div class="kpi-line" title="+는 적금·주식으로 넣은 돈, −는 빼서 쓴 돈"><span>적금·주식 순투입 <span class="muted">(${ay}년)</span></span><b>${sgnWon(ytd.inv)}</b></div>
-      ${ipoLive().length ? `<button type="button" class="kpi-line kpi-line-btn" data-act="view" data-v="ipo" title="공모주 페이지에서 출금·입금을 고른 종목만 더해져요"><span>공모주 반영 <span class="muted">(${ipoAssetNow().n}개 종목)</span></span><b>${sgnWon(ipoAssetNow().v)}</b></button>` : ""}
+      ${ipoLive().length ? `<button type="button" class="kpi-line kpi-line-btn" data-act="view" data-v="ipo" title="공모주 페이지에서 출금 · 환불 입금 · 매도 입금을 고른 것만, 그 날짜에 맞춰 더해져요"><span>공모주 반영 <span class="muted">(${ipoAssetNow().n}개 종목)</span></span><b>${sgnWon(ipoAssetNow().v)}</b></button>` : ""}
     </div>
   </article>
   <div class="kpi-col">
@@ -3157,103 +3204,145 @@ function renderCatTrend() {
 
 /* ===== 65-ipo.js ===== */
 /* ============================================================
-   공모주 손익 — 종목별 청약금 · 매도금 → 손익
-   현재 자산에는 '출금' · '입금'을 고른 것만 반영하고,
-   같은 종목은 (입금 − 출금) 차이를 한 번만 반영 (예: A공모주 +3만원)
+   공모주 손익 — 종목마다 ① 청약 입금액(출금) ② 환불 금액(1차 입금) ③ 매도 금액(2차 입금)
+   + 청약 수수료 · 계좌 간 이체 수수료
+   손익 = 환불 + 매도 − 청약 입금 − 수수료
+   현재 자산에는 고른 흐름만 각자의 날짜에 반영해요(환불이 먼저 들어오고 나중에 매도금이 들어와도 그대로)
+   종목마다 반영 합계는 한 줄로 보여 줘요 (예: A공모주 +28,500원)
    ============================================================ */
 let IPO_EDIT = null;
 const ipoNum = (v) => Number(String(v ?? "").replace(/[^\d]/g, "")) || 0;
 const plCls = (v) => (v > 0 ? "pl-up" : v < 0 ? "pl-down" : "");
 const pctS = (r) => `${r > 0 ? "+" : r < 0 ? "−" : ""}${Math.abs(r * 100).toFixed(1)}%`;
 const dotD = (s) => (s ? s.slice(2).replaceAll("-", ".") : "");
+const mdD = (s) => (s ? `${Number(s.slice(5, 7))}.${Number(s.slice(8, 10))}` : "");
+const IPO_K = { ro: "출금", rr: "환불 입금", ri: "매도 입금" };
 
 function ipoStats() {
   const L = ipoLive(), sold = L.filter(ipoSold), pend = L.filter((p) => !ipoSold(p)), [ty] = splitD(todayStr());
-  const prof = sold.reduce((s, p) => s + ipoProfit(p), 0), cost = sold.reduce((s, p) => s + p.sa, 0);
+  const prof = sold.reduce((s, p) => s + ipoProfit(p), 0), cost = sold.reduce((s, p) => s + (ipoCost(p) || p.sa), 0);
+  const fees = sold.reduce((s, p) => s + ipoFees(p), 0);
   const yr = sold.filter((p) => (p.xd || p.sd).startsWith(ty + "-"));
   const now = ipoAssetNow();
   return {
-    L, sold, pend, prof, cost, ty, win: sold.filter((p) => ipoProfit(p) > 0).length, lose: sold.filter((p) => ipoProfit(p) < 0).length,
-    yrProf: yr.reduce((s, p) => s + ipoProfit(p), 0), yrN: yr.length, pendSum: pend.reduce((s, p) => s + p.sa, 0), refl: now.v, reflN: now.n,
+    L, sold, pend, prof, cost, fees, ty, win: sold.filter((p) => ipoProfit(p) > 0).length, lose: sold.filter((p) => ipoProfit(p) < 0).length,
+    yrProf: yr.reduce((s, p) => s + ipoProfit(p), 0), yrN: yr.length,
+    pendSum: pend.reduce((s, p) => s + ipoCost(p), 0), pendSub: pend.filter((p) => !ipoRefunded(p)).length, pendHold: pend.filter(ipoRefunded).length,
+    refl: now.v, reflN: now.n,
   };
+}
+
+/** 목록 칩: 출금 −(입금+수수료) · 환불 +환불금 · 매도 +매도금 */
+function ipoChip(p, k) {
+  const on = !!p[k] && (k === "ro" || (k === "rr" ? ipoRefunded(p) : ipoSold(p)));
+  const ready = k === "ro" || (k === "rr" ? ipoRefunded(p) : ipoSold(p));
+  const amt = k === "ro" ? `−${fmt(p.sa + ipoFees(p))}` : k === "rr" ? (ready ? `+${fmt(p.ra)}` : "") : ready ? `+${fmt(p.xa)}` : "";
+  const tip = !ready ? ` disabled title="${k === "rr" ? "환불 금액" : "매도 금액"}을 적으면 고를 수 있어요"` : k === "ro" && ipoFees(p) ? ` title="청약 입금액 ${fmt(p.sa)} + 수수료 ${fmt(ipoFees(p))}"` : "";
+  return `<button type="button" class="ref-chip${on ? " is-on" : ""}" data-act="ipoRef" data-k="${k}" data-id="${esc(p.id)}" aria-pressed="${on}"${tip}><i class="ck" aria-hidden="true"></i>${IPO_K[k]} ${ready ? amt : "(입력 후)"}</button>`;
 }
 
 function renderIpo() {
   const S = ipoStats(), f = ["all", "pend", "sold"].includes(UI.ipoFilter) ? UI.ipoFilter : "all";
   $("#ipoStats").innerHTML = `
     <div class="ipo-st"><span class="ipo-st-l">총 손익<small>매도 ${S.sold.length}건</small></span><b class="${plCls(S.prof)}">${sgnWon(S.prof)}</b>
-      <span class="ipo-st-s">${S.cost ? `수익률 ${pctS(S.prof / S.cost)} · 이익 ${S.win} · 손실 ${S.lose}` : "매도까지 적으면 손익이 계산돼요"}</span></div>
+      <span class="ipo-st-s">${S.sold.length ? `수익률 ${S.cost ? pctS(S.prof / S.cost) : "−"} · 이익 ${S.win} · 손실 ${S.lose}${S.fees ? ` · 수수료 ${fmt(S.fees)}원 뺌` : ""}` : "매도까지 적으면 손익이 계산돼요"}</span></div>
     <div class="ipo-st"><span class="ipo-st-l">${S.ty}년 손익<small>매도일 기준</small></span><b class="${plCls(S.yrProf)}">${sgnWon(S.yrProf)}</b>
       <span class="ipo-st-s">${S.yrN ? `${S.yrN}개 종목` : "올해 매도한 종목이 없어요"}</span></div>
-    <div class="ipo-st"><span class="ipo-st-l">청약 중<small>${S.pend.length}건</small></span><b>${won(S.pendSum)}</b>
-      <span class="ipo-st-s">${S.pend.length ? "매도금액을 적으면 손익이 나와요" : "진행 중인 청약이 없어요"}</span></div>
+    <div class="ipo-st"><span class="ipo-st-l">진행 중<small>${S.pend.length}건</small></span><b>${won(S.pendSum)}</b>
+      <span class="ipo-st-s">${S.pend.length ? `아직 안 돌아온 돈 · 청약 중 ${S.pendSub} · 매도 전 ${S.pendHold}` : "진행 중인 청약이 없어요"}</span></div>
     <div class="ipo-st acc"><span class="ipo-st-l">내 자산에 반영</span><b class="${plCls(S.refl)}">${sgnWon(S.refl)}</b>
-      <span class="ipo-st-s">${S.reflN ? `출금·입금을 고른 ${S.reflN}개 종목` : "출금·입금을 고르면 반영돼요"}</span></div>`;
+      <span class="ipo-st-s">${S.reflN ? `${S.reflN}개 종목 · 고른 출금·입금만 날짜에 맞춰` : "출금·입금을 고르면 반영돼요"}</span></div>`;
   $$("#ipoFilterSeg button").forEach((b) => { const on = b.dataset.v === f; b.classList.toggle("is-on", on); b.setAttribute("aria-pressed", on); });
   const list = S.L.filter((p) => f === "all" || (f === "pend" ? !ipoSold(p) : ipoSold(p)))
     .sort((a, b) => (b.sd > a.sd ? 1 : b.sd < a.sd ? -1 : (b.t || 0) - (a.t || 0)));
-  $("#ipoListSub").textContent = S.L.length ? `${S.L.length}개 종목 · 최근 청약 순 · 출금·입금 버튼으로 자산 반영을 켜고 꺼요` : "아직 기록한 공모주가 없어요";
+  $("#ipoListSub").textContent = S.L.length ? `${S.L.length}개 종목 · 최근 청약 순 · 출금·환불·매도 버튼으로 자산 반영을 켜고 꺼요` : "아직 기록한 공모주가 없어요";
   const mx = Math.max(1, ...S.sold.map((p) => Math.abs(ipoProfit(p))));
-  const base = DB.settings.baseDate;
   $("#ipoList").innerHTML = list.length ? list.map((p) => {
-    const sold = ipoSold(p), v = ipoProfit(p), fl = ipoFlow(p), early = fl && fl.d < base;
+    const sold = ipoSold(p), refd = ipoRefunded(p), v = ipoProfit(p), r = ipoRate(p), net = ipoNet(p), fee = ipoFees(p);
+    const next = sold ? "" : refd ? `<button type="button" class="link-btn" data-act="ipoEdit" data-id="${esc(p.id)}" data-v="sell">매도 입력 ${icon("chevR", 14)}</button>` : `<button type="button" class="link-btn" data-act="ipoEdit" data-id="${esc(p.id)}" data-v="refund">환불 입력 ${icon("chevR", 14)}</button>`;
+    const steps = [`청약 ${esc(dotD(p.sd))} · ${won(p.sa)}`];
+    if (refd) steps.push(`환불 ${esc(dotD(p.rd || p.sd))} · ${won(p.ra)}`);
+    if (sold) steps.push(`매도 ${esc(dotD(p.xd || p.sd))} · ${won(p.xa)}`);
+    const extra = [refd ? `배정 ${won(ipoCost(p))}` : "", fee ? `수수료 ${won(fee)}${p.fs && p.ft ? ` (청약 ${fmt(p.fs)} · 이체 ${fmt(p.ft)})` : p.ft ? " (이체)" : " (청약)"}` : "", p.m ? esc(p.m) : ""].filter(Boolean);
+    const notes = [net.fut ? `<small class="fut">${esc(mdD(net.futD))}부터 ${sgnWon(net.fut)} 더 반영돼요</small>` : "", net.early ? `<small>기초자산 기준일 이전 ${sgnWon(net.early)}은 빠져요</small>` : ""].join("");
     return `<div class="ipo-item${IPO_EDIT === p.id ? " is-edit" : ""}" data-id="${esc(p.id)}">
-      <div class="ipo-nm"><b>${esc(p.n)}</b>${sold ? "" : `<span class="badge">청약 중</span>`}</div>
-      <div class="ipo-pl ${sold ? plCls(v) : ""}">${sold ? `${sgnWon(v)}<small>${p.sa ? pctS(v / p.sa) : ""}</small>` : `<button type="button" class="link-btn" data-act="ipoEdit" data-id="${esc(p.id)}" data-v="sell">매도 입력 ${icon("chevR", 14)}</button>`}</div>
-      <div class="ipo-meta">청약 ${esc(dotD(p.sd))} · ${won(p.sa)}${sold ? ` → 매도 ${esc(dotD(p.xd || p.sd))} · ${won(p.xa)}` : ""}${p.m ? ` · ${esc(p.m)}` : ""}</div>
+      <div class="ipo-nm"><b>${esc(p.n)}</b>${sold ? "" : `<span class="badge">${refd ? "매도 전" : "청약 중"}</span>`}</div>
+      <div class="ipo-pl ${sold ? plCls(v) : ""}">${sold ? `${sgnWon(v)}<small>${r == null ? "" : pctS(r)}</small>` : next}</div>
+      <div class="ipo-meta">${steps.join(" → ")}${extra.length ? `<br/>${extra.join(" · ")}` : ""}</div>
       ${sold ? `<div class="ipo-barw" aria-hidden="true"><i class="${v >= 0 ? "bg-up" : "bg-down"}" style="width:${Math.max(2, Math.round((Math.abs(v) / mx) * 100))}%"></i></div>` : ""}
       <div class="ipo-bot">
-        <div class="ipo-ref" role="group" aria-label="${esc(p.n)} 현재 자산 반영">
-          <button type="button" class="ref-chip${p.ro ? " is-on" : ""}" data-act="ipoRef" data-k="ro" data-id="${esc(p.id)}" aria-pressed="${!!p.ro}"><i class="ck" aria-hidden="true"></i>출금 −${fmt(p.sa)}</button>
-          <button type="button" class="ref-chip${p.ri && sold ? " is-on" : ""}" data-act="ipoRef" data-k="ri" data-id="${esc(p.id)}" aria-pressed="${!!(p.ri && sold)}"${sold ? "" : " disabled title='매도금액을 적으면 고를 수 있어요'"}><i class="ck" aria-hidden="true"></i>${sold ? `입금 +${fmt(p.xa)}` : "입금 (매도 후)"}</button>
-        </div>
-        <span class="ipo-net">자산 반영 <b class="${fl ? plCls(fl.a) : ""}">${fl ? `${esc(p.n)} ${sgnWon(fl.a)}` : "안 함"}</b>${early ? `<small>기초자산 기준일 이전이라 자산 계산에서 빠져요</small>` : ""}</span>
+        <div class="ipo-ref" role="group" aria-label="${esc(p.n)} 현재 자산 반영">${ipoChip(p, "ro")}${ipoChip(p, "rr")}${ipoChip(p, "ri")}</div>
+        <span class="ipo-net">자산 반영 <b class="${net.any ? plCls(net.v) : ""}">${net.any ? `${esc(p.n)} ${sgnWon(net.v)}` : "안 함"}</b>${notes}</span>
         <span class="ipo-acts"><button type="button" class="icon-btn sm" data-act="ipoEdit" data-id="${esc(p.id)}" aria-label="${esc(p.n)} 수정">${icon("pencil", 15)}</button><button type="button" class="icon-btn sm" data-act="ipoDel" data-id="${esc(p.id)}" aria-label="${esc(p.n)} 삭제">${icon("trash", 15)}</button></span>
       </div>
     </div>`;
-  }).join("") : `<div class="empty">${S.L.length ? "이 조건에 맞는 공모주가 없어요" : `<span class="em" aria-hidden="true">📈</span>위에서 첫 공모주를 기록해 보세요<br/><span style="font-weight:700">청약금액만 먼저 적고, 팔고 나서 매도금액을 더해도 돼요</span>`}</div>`;
+  }).join("") : `<div class="empty">${S.L.length ? "이 조건에 맞는 공모주가 없어요" : `<span class="em" aria-hidden="true">📈</span>위에서 첫 공모주를 기록해 보세요<br/><span style="font-weight:700">청약 입금액만 먼저 적고, 환불·매도 뒤에 수정해서 채워도 돼요</span>`}</div>`;
   ipoPreview();
 }
 
 /* ---------- 입력 폼 ---------- */
+const IPO_AMT = ["ipSa", "ipRa", "ipXa", "ipFs", "ipFt"];
 function ipoFormValues() {
-  const xaRaw = $("#ipXa").value.trim();
-  return { n: $("#ipName").value.trim(), sd: $("#ipSd").value, sa: ipoNum($("#ipSa").value), xd: $("#ipXd").value, xa: xaRaw ? ipoNum(xaRaw) : null, m: $("#ipMemo").value.trim(), ro: $("#ipRo").checked ? 1 : 0, ri: $("#ipRi").checked ? 1 : 0 };
+  const opt = (id) => { const s = $("#" + id).value.trim(); return s ? ipoNum(s) : null; };
+  return {
+    n: $("#ipName").value.trim(), m: $("#ipMemo").value.trim(),
+    sd: $("#ipSd").value, sa: ipoNum($("#ipSa").value), ro: $("#ipRo").checked ? 1 : 0,
+    rd: $("#ipRd").value, ra: opt("ipRa"), rr: $("#ipRr").checked ? 1 : 0,
+    xd: $("#ipXd").value, xa: opt("ipXa"), ri: $("#ipRi").checked ? 1 : 0,
+    fs: ipoNum($("#ipFs").value), ft: ipoNum($("#ipFt").value),
+  };
 }
-/** 손익 · 자산 반영 미리보기 (입금은 매도금액이 있어야 고를 수 있어요) */
+/** 손익 계산식 · 자산 반영 미리보기 (입금 반영은 금액을 적어야 고를 수 있어요) */
 function ipoPreview() {
-  const v = ipoFormValues(), ri = $("#ipRi");
+  const v = ipoFormValues(), rr = $("#ipRr"), ri = $("#ipRi");
+  rr.disabled = v.ra == null; if (rr.disabled) rr.checked = false;
   ri.disabled = v.xa == null; if (ri.disabled) ri.checked = false;
-  const fl = ipoFlow({ ...v, ri: ri.checked ? 1 : 0 }), pl = v.xa == null ? null : v.xa - v.sa;
-  $("#ipPreview").innerHTML = `${pl == null ? "" : `<span>손익 <b class="${plCls(pl)}">${sgnWon(pl)}</b></span>`}<span>자산 반영 <b class="${fl ? plCls(fl.a) : ""}">${fl ? sgnWon(fl.a) : "안 함"}</b></span>`;
+  const p = { ...v, rr: rr.checked ? 1 : 0, ri: ri.checked ? 1 : 0, rd: v.rd || v.sd, xd: v.xd || v.rd || v.sd }, fee = ipoFees(p);
+  let calc;
+  if (!v.sa) calc = `<span>청약 입금액부터 적어 주세요</span>`;
+  else if (ipoSold(p)) {
+    const pl = ipoProfit(p), r = ipoRate(p);
+    calc = `<span>손익 = ${ipoRefunded(p) ? `환불 ${fmt(p.ra)} + ` : ""}매도 ${fmt(p.xa)} − 입금 ${fmt(p.sa)}${fee ? ` − 수수료 ${fmt(fee)}` : ""} = <b class="${plCls(pl)}">${sgnWon(pl)}${r == null ? "" : ` (${pctS(r)})`}</b></span>`;
+  } else if (ipoRefunded(p)) calc = `<span>배정 금액 = 입금 ${fmt(p.sa)} − 환불 ${fmt(p.ra)} = <b>${won(ipoCost(p))}</b> · 매도 금액을 적으면 손익이 나와요</span>`;
+  else calc = `<span>환불 · 매도 금액을 적으면 손익이 나와요</span>`;
+  const fl = ipoFlows(p), t = todayStr(), sum = fl.reduce((s, f) => s + f.a, 0);
+  const parts = fl.map((f) => `${IPO_K[f.k]} ${sgnWon(f.a)} <small>(${esc(mdD(f.d))}${f.d > t ? " 예정" : ""})</small>`);
+  $("#ipPreview").innerHTML = `${calc}<span>내 자산 반영 <b class="${fl.length ? plCls(sum) : ""}">${fl.length ? sgnWon(sum) : "안 함"}</b>${parts.length ? ` · ${parts.join(" · ")}` : ""}</span>${fee && p.ro ? `<small>수수료는 출금과 함께 청약일에 빠져요</small>` : ""}`;
 }
 function ipoResetForm() {
   IPO_EDIT = null;
-  for (const id of ["ipName", "ipSa", "ipXa", "ipXd", "ipMemo"]) $("#" + id).value = "";
-  $("#ipSd").value = todayStr(); $("#ipRo").checked = false; $("#ipRi").checked = false;
+  for (const id of ["ipName", "ipMemo", "ipRd", "ipXd", ...IPO_AMT]) $("#" + id).value = "";
+  $("#ipSd").value = todayStr();
+  for (const id of ["ipRo", "ipRr", "ipRi"]) $("#" + id).checked = false;
   $("#ipFormTitle").textContent = "새 공모주 기록"; $("#ipSubmit").textContent = "기록하기"; $("#ipCancel").hidden = true;
   ipoPreview();
 }
-function ipoEdit(id, focusSell) {
+/** 수정 열기 · focus: "refund" = 환불 칸, "sell" = 매도 칸 */
+function ipoEdit(id, focus) {
   const p = DB.ipos.find((x) => x.id === id && !x.del); if (!p) return;
   if (UI.view !== "ipo") { UI.view = "ipo"; saveUI(); renderAll(); }
   IPO_EDIT = id;
-  $("#ipName").value = p.n; $("#ipSd").value = p.sd; $("#ipSa").value = p.sa ? fmt(p.sa) : "";
-  $("#ipXd").value = p.xd || (focusSell ? todayStr() : ""); $("#ipXa").value = p.xa == null ? "" : fmt(p.xa);
-  $("#ipMemo").value = p.m || ""; $("#ipRo").checked = !!p.ro; $("#ipRi").checked = !!p.ri;
+  const amt = (v) => (v == null ? "" : fmt(v));
+  $("#ipName").value = p.n; $("#ipMemo").value = p.m || "";
+  $("#ipSd").value = p.sd; $("#ipSa").value = p.sa ? fmt(p.sa) : ""; $("#ipRo").checked = !!p.ro;
+  $("#ipRd").value = p.rd || (focus === "refund" ? maxD(p.sd, todayStr()) : ""); $("#ipRa").value = p.ra == null ? "" : amt(p.ra); $("#ipRr").checked = !!p.rr;
+  $("#ipXd").value = p.xd || (focus === "sell" ? maxD(p.rd || p.sd, todayStr()) : ""); $("#ipXa").value = p.xa == null ? "" : amt(p.xa); $("#ipRi").checked = !!p.ri;
+  $("#ipFs").value = p.fs ? fmt(p.fs) : ""; $("#ipFt").value = p.ft ? fmt(p.ft) : "";
   $("#ipFormTitle").textContent = `${p.n} 수정`; $("#ipSubmit").textContent = "수정 저장"; $("#ipCancel").hidden = false;
   ipoPreview(); renderIpo();
   const card = $("#ipoFormCard"); card.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  setTimeout(() => $(focusSell ? "#ipXa" : "#ipName").focus({ preventScroll: true }), 200);
+  setTimeout(() => $(focus === "sell" ? "#ipXa" : focus === "refund" ? "#ipRa" : "#ipName").focus({ preventScroll: true }), 200);
 }
 function ipoSubmit(ev) {
   ev.preventDefault();
-  const v = ipoFormValues();
+  const v = ipoFormValues(), isD = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s || "");
   if (!v.n) { $("#ipName").focus(); toast("종목명을 적어 주세요"); return; }
-  if (!v.sa) { $("#ipSa").focus(); toast("청약금액을 적어 주세요"); return; }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(v.sd)) v.sd = todayStr();
-  if (v.xa != null && !/^\d{4}-\d{2}-\d{2}$/.test(v.xd)) v.xd = maxD(v.sd, todayStr());
-  if (v.xa == null) { v.xd = ""; v.ri = 0; }
+  if (!v.sa) { $("#ipSa").focus(); toast("청약 입금액을 적어 주세요"); return; }
+  if (v.ra != null && v.ra > v.sa) { $("#ipRa").focus(); toast("환불 금액이 청약 입금액보다 커요", { err: true }); return; }
+  if (!isD(v.sd)) v.sd = todayStr();
+  if (v.ra == null) { v.rd = ""; v.rr = 0; } else if (!isD(v.rd)) v.rd = maxD(v.sd, todayStr());
+  if (v.xa == null) { v.xd = ""; v.ri = 0; } else if (!isD(v.xd)) v.xd = maxD(v.rd || v.sd, todayStr());
+  if (v.rd && v.rd < v.sd) { $("#ipRd").focus(); toast("환불일이 청약일보다 빨라요"); return; }
   if (v.xd && v.xd < v.sd) { $("#ipXd").focus(); toast("매도일이 청약일보다 빨라요"); return; }
   const wasSample = DB.sample && !IPO_EDIT;
   if (wasSample) clearSample(true);
@@ -3261,17 +3350,18 @@ function ipoSubmit(ev) {
   if (p) Object.assign(p, v, { t: now });
   else { p = { id: "ipo" + uid(), ...v, t: now, del: 0 }; DB.ipos.push(p); }
   const edited = !!IPO_EDIT; ipoResetForm(); commit();
-  const fl = ipoFlow(p), pl = ipoProfit(p);
-  toast(`📈 ${p.n} ${edited ? "수정했어요" : "기록했어요"}${pl == null ? "" : ` · 손익 ${sgnWon(pl)}`}${fl ? ` · 자산 ${sgnWon(fl.a)}` : ""}${wasSample ? " · 예시 데이터는 지웠어요" : ""}`);
+  const net = ipoNet(p), pl = ipoProfit(p);
+  toast(`📈 ${p.n} ${edited ? "수정했어요" : "기록했어요"}${pl == null ? "" : ` · 손익 ${sgnWon(pl)}`}${net.any ? ` · 자산 ${sgnWon(net.v)}` : ""}${wasSample ? " · 예시 데이터는 지웠어요" : ""}`);
 }
 function ipoToggleRef(b) {
   const p = DB.ipos.find((x) => x.id === b.dataset.id && !x.del); if (!p) return;
-  const k = b.dataset.k; if (k === "ri" && !ipoSold(p)) return;
+  const k = b.dataset.k; if (!IPO_K[k]) return;
+  if ((k === "rr" && !ipoRefunded(p)) || (k === "ri" && !ipoSold(p))) return;
   p[k] = p[k] ? 0 : 1; p.t = Date.now();
-  if (IPO_EDIT === p.id) { $("#ipRo").checked = !!p.ro; $("#ipRi").checked = !!p.ri; }
+  if (IPO_EDIT === p.id) { $("#ipRo").checked = !!p.ro; $("#ipRr").checked = !!p.rr; $("#ipRi").checked = !!p.ri; }
   commit();
-  const fl = ipoFlow(p);
-  toast(fl ? `${p.n}: 내 자산에 ${sgnWon(fl.a)} 반영` : `${p.n}: 자산 반영을 껐어요`);
+  const net = ipoNet(p);
+  toast(`${p.n}: ${IPO_K[k]} ${p[k] ? "반영" : "반영 끔"} · 자산 반영 ${net.any ? sgnWon(net.v) : "안 함"}`);
 }
 function ipoDelete(id) {
   const p = DB.ipos.find((x) => x.id === id && !x.del); if (!p) return;
@@ -3287,8 +3377,9 @@ function bindIpo() {
   $("#ipoForm").addEventListener("submit", ipoSubmit);
   $("#ipoForm").addEventListener("input", (ev) => {
     const el = ev.target;
-    if (el.id === "ipSa" || el.id === "ipXa") { const n = ipoNum(el.value); el.value = n ? n.toLocaleString("ko-KR") : ""; }
-    if (el.id === "ipXa" && el.value && !$("#ipXd").value) $("#ipXd").value = maxD($("#ipSd").value || todayStr(), todayStr());
+    if (IPO_AMT.includes(el.id)) { const s = el.value.trim(), n = ipoNum(s); el.value = s === "" ? "" : n.toLocaleString("ko-KR"); }
+    if (el.id === "ipRa" && el.value && !$("#ipRd").value) $("#ipRd").value = maxD($("#ipSd").value || todayStr(), todayStr());
+    if (el.id === "ipXa" && el.value && !$("#ipXd").value) $("#ipXd").value = maxD($("#ipRd").value || $("#ipSd").value || todayStr(), todayStr());
     ipoPreview();
   });
   $("#ipoForm").addEventListener("change", ipoPreview);
@@ -3314,7 +3405,8 @@ function openModal({ title, sub, body, foot, wide, onMount, onClose, tabs }) {
   MODAL = M;
   onMount && onMount(el, M);
   const f = el.querySelector("[autofocus]") || el.querySelector(".modal-body input:not([type=hidden]), .modal-body select, .modal-body button");
-  setTimeout(() => f && f.focus({ preventScroll: true }), 30);
+  // 이미 창 안에서 입력을 시작했으면 포커스를 옮기지 않아요
+  setTimeout(() => { if (f && !el.contains(document.activeElement)) f.focus({ preventScroll: true }); }, 30);
   return M;
 }
 function closeModal() { if (MODAL) MODAL.close(); }
@@ -4012,13 +4104,14 @@ async function exportXlsx() {
   const ipos = ipoLive().filter((p) => !p.sample).sort((a, b) => (a.sd < b.sd ? -1 : a.sd > b.sd ? 1 : 0));
   if (ipos.length) {
     const num = (v) => ({ t: "n", v, z: "#,##0" }), date = (s) => (s ? { t: "n", v: serial(s), z: "yyyy-mm-dd" } : null);
-    const aoa = [["종목명", "청약일", "청약금액", "매도일", "매도금액", "손익", "수익률", "출금 반영", "입금 반영", "자산 반영액", "메모"]];
+    const aoa = [["종목명", "청약일", "청약 입금액", "환불일", "환불 금액", "매도일", "매도 금액", "청약 수수료", "이체 수수료", "배정 금액", "손익", "수익률", "출금 반영", "환불 입금 반영", "매도 입금 반영", "자산 반영액(오늘)", "메모"]];
     for (const p of ipos) {
-      const pl = ipoProfit(p), f = ipoFlow(p);
-      aoa.push([p.n, date(p.sd), num(p.sa), date(p.xd), p.xa == null ? null : num(p.xa), pl == null ? null : num(pl), pl == null || !p.sa ? null : { t: "n", v: pl / p.sa, z: "0.0%" }, p.ro ? "O" : null, p.ri ? "O" : null, f ? num(f.a) : null, p.m || null]);
+      const pl = ipoProfit(p), r = ipoRate(p), net = ipoNet(p), opt = (v) => (v == null ? null : num(v));
+      aoa.push([p.n, date(p.sd), num(p.sa), date(p.rd), opt(p.ra), date(p.xd), opt(p.xa), num(p.fs || 0), num(p.ft || 0), ipoRefunded(p) ? num(ipoCost(p)) : null,
+        opt(pl), r == null ? null : { t: "n", v: r, z: "0.0%" }, p.ro ? "O" : null, p.rr && ipoRefunded(p) ? "O" : null, p.ri && ipoSold(p) ? "O" : null, net.any ? num(net.v) : null, p.m || null]);
     }
     const ws = XLSX.utils.aoa_to_sheet(aoa);
-    ws["!cols"] = [{ wch: 16 }, { wch: 11 }, { wch: 12 }, { wch: 11 }, { wch: 12 }, { wch: 11 }, { wch: 8 }, { wch: 8 }, { wch: 8 }, { wch: 12 }, { wch: 20 }];
+    ws["!cols"] = [{ wch: 16 }, { wch: 11 }, { wch: 12 }, { wch: 11 }, { wch: 12 }, { wch: 11 }, { wch: 12 }, { wch: 10 }, { wch: 10 }, { wch: 12 }, { wch: 11 }, { wch: 8 }, { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 20 }];
     XLSX.utils.book_append_sheet(wb, ws, "공모주");
   }
   if (!wb.SheetNames.length) { done(); toast("내보낼 내역이 없어요"); return; }
@@ -4099,11 +4192,13 @@ function loadSample() {
     { id: "fxs4", name: "자유적금", c: 12, a: 200000, day: 26, from: `${ty}-01`, on: true, sample: true, t: 1, del: 0 },
   ]);
   const sd = (m, d) => minD(ymd(ty, m, d), t);
+  const ago = (n) => minD(addDays(t, -n), t);
   DB.ipos = DB.ipos.concat([
-    { id: "ips1", n: "예시바이오", sd: sd(3, 12), sa: 1000000, xd: sd(3, 20), xa: 1186000, ro: 1, ri: 1, m: "가상 종목 · 증권사 A", sample: true, t: 1, del: 0 },
-    { id: "ips2", n: "샘플로보틱스", sd: sd(6, 3), sa: 500000, xd: sd(6, 11), xa: 471500, ro: 1, ri: 1, m: "가상 종목", sample: true, t: 1, del: 0 },
-    { id: "ips3", n: "가상에너지", sd: sd(9, 8), sa: 800000, xd: sd(9, 16), xa: 1032000, ro: 0, ri: 0, m: "가상 종목 · 반영 안 함", sample: true, t: 1, del: 0 },
-    { id: "ips4", n: "데모핀테크", sd: minD(addDays(t, -2), t), sa: 600000, xd: "", xa: null, ro: 0, ri: 0, m: "가상 종목 · 청약 중", sample: true, t: 1, del: 0 },
+    { id: "ips1", n: "예시바이오", sd: sd(3, 12), sa: 1000000, ro: 1, rd: sd(3, 14), ra: 812000, rr: 1, xd: sd(3, 20), xa: 254000, ri: 1, fs: 2000, ft: 0, m: "가상 종목 · 증권사 A", sample: true, t: 1, del: 0 },
+    { id: "ips2", n: "샘플로보틱스", sd: sd(6, 3), sa: 500000, ro: 1, rd: sd(6, 5), ra: 360000, rr: 1, xd: sd(6, 11), xa: 131000, ri: 1, fs: 1500, ft: 500, m: "가상 종목", sample: true, t: 1, del: 0 },
+    { id: "ips3", n: "가상에너지", sd: sd(9, 8), sa: 800000, ro: 0, rd: sd(9, 10), ra: 560000, rr: 0, xd: sd(9, 16), xa: 302000, ri: 0, fs: 2000, ft: 0, m: "가상 종목 · 반영 안 함", sample: true, t: 1, del: 0 },
+    { id: "ips4", n: "데모핀테크", sd: ago(6), sa: 600000, ro: 1, rd: ago(4), ra: 447000, rr: 1, xd: "", xa: null, ri: 0, fs: 2000, ft: 0, m: "가상 종목 · 환불만 먼저 들어옴", sample: true, t: 1, del: 0 },
+    { id: "ips5", n: "견본소재", sd: ago(1), sa: 400000, ro: 0, rd: "", ra: null, rr: 0, xd: "", xa: null, ri: 0, fs: 0, ft: 0, m: "가상 종목 · 청약 중", sample: true, t: 1, del: 0 },
   ]);
   DB.sample = true; DB._sampleBase = { base: DB.settings.base, baseDate: DB.settings.baseDate };
   DB.settings.base = 1500000; DB.settings.baseDate = start;
@@ -4453,7 +4548,7 @@ const ACTIONS = {
   fixed: () => openFixed(),
   design: () => openDesign(),
   ipoRef: (b) => ipoToggleRef(b),
-  ipoEdit: (b) => ipoEdit(b.dataset.id, b.dataset.v === "sell"),
+  ipoEdit: (b) => ipoEdit(b.dataset.id, b.dataset.v || ""),
   ipoDel: (b) => ipoDelete(b.dataset.id),
   ipoFilter: (b) => { UI.ipoFilter = b.dataset.v; saveUI(); renderIpo(); },
   settings: (b) => openSettings(b.dataset.v),
